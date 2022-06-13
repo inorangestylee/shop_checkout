@@ -1,9 +1,7 @@
-#include <iostream>
-
-#include "product.h"
 #include "bundle.h"
-#include "promo.h"
 #include "cli.h"
+#include "product.h"
+#include "promo.h"
    
 int main() {
     // init shop shelf and empty client cart

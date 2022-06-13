@@ -1,5 +1,18 @@
 #include "cli.h"
 
+#include <exception>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+#include "cli_utils.h"
+#include "bundle.h"
+#include "promo.h"
+
+using std::cout; using std::endl;
+using std::vector; using std::string;
+
 namespace cli {
 
     void cli(shop::Bundle* s, shop::Bundle* c, shop::Promos* p) {
@@ -33,7 +46,7 @@ namespace cli {
         return;
     }
 
-    void interp(vector<string>* cmdvec, shop::Bundle* s, shop::Bundle* c, shop::Promos* p) {
+    void interp(const vector<string>* cmdvec, shop::Bundle* s, shop::Bundle* c, shop::Promos* p) {
         vector<string> cv = *cmdvec;
         string cmd = cv[0];
 

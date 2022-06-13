@@ -1,5 +1,14 @@
 #include "cli_utils.h"
 
+#include <iostream>
+#include <string>
+#include <exception>
+
+#include "bundle.h"
+#include "promo.h"
+
+using std::cout; using std::cin; using std::endl;
+
 namespace cli {
     void motd() {
         cout
@@ -72,7 +81,7 @@ namespace cli {
             
     }
 
-    void print_error(std::exception& ex) {
+    void print_error(const std::exception& ex) {
         cout.flush();
         cout << "error: " << ex.what() << endl;
         return;

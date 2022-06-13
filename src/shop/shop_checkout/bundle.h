@@ -1,13 +1,10 @@
 #pragma once
-#include <iostream>
+
 #include <vector>
-#include <iomanip>
-#include <string>
-#include <algorithm>
-#include <exception>
 
 #include "product.h"
 
+using std::vector;
 
 namespace shop {
 
@@ -15,7 +12,7 @@ namespace shop {
     private:
         bool is_client = true;
     public:
-        std::vector<Product> products;
+        vector<Product> products;
         static Bundle Init();
         static Bundle InitShelfDefault();
         void AddProduct(Product* p);

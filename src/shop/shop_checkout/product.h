@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-#include <vector>
+
+using std::string;
 
 namespace shop {
 
@@ -15,15 +16,15 @@ namespace shop {
     class Product {
     public:
         unsigned int id;
-        std::string name;
-        std::string units;
+        string name;
+        string units;
         double price;
         double count;
         bool is_whole;
         bool is_raw = true;
         ProductType type;
         Product() = default;
-        Product(unsigned int i, std::string n, std::string u, double p, double c, bool w, ProductType pt = ProductType::DEFAULT);
+        Product(unsigned int i, string n, string u, double p, double c, bool w, ProductType pt = ProductType::DEFAULT);
     };
 
 }

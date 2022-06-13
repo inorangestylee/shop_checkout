@@ -6,7 +6,7 @@
 
 #include "bundle.h"
 
-using std::string; using std::vector;
+using std::string; using std::vector; using std::tuple;
 
 namespace shop {
 
@@ -15,14 +15,10 @@ namespace shop {
         unsigned int id;
         string name;
         double discount;
-        double (*f)(const unsigned int percent, const Bundle* b);
+        double (*f)(const double percent, const Bundle* b);
 
-        Promo(unsigned int i, string n, double d, double (*fu)(const unsigned int percent, const Bundle* b)) {
-            id = i;
-            name = n;
-            discount = d;
-            f = fu;
-        };
+        Promo(unsigned int i, string n, double d, double (*fu)(const double percent, const Bundle* b))
+            : id(i), name(n), discount(d), f(fu) {};
 
         std::string ToString();
     };
@@ -33,13 +29,13 @@ namespace shop {
 
         static Promos InitDefault();
         
-        std::tuple<unsigned int, double> GetBestDiscount(const Bundle* b);
+        tuple<unsigned int, double> GetBestDiscount(const Bundle* b);
         void Print();
 
         Promo Get(unsigned int id);
     };
 
-    double promo_milk(const unsigned int percent, const Bundle* b);
-    double promo_flour(const unsigned int percent, const Bundle* b);
-    double promo_mvp(const unsigned int percent, const Bundle* b);
+    double promo_milk(const double percent, const Bundle* b);
+    double promo_flour(const double percent, const Bundle* b);
+    double promo_mvp(const double percent, const Bundle* b);
 }

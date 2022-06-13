@@ -1,5 +1,11 @@
 ﻿#include "bundle.h"
 
+#include <iostream>
+#include <string>
+
+using std::cout; using std::endl;
+using std::string;
+
 namespace shop {
     const char CURRENCY = '$';
 
@@ -70,28 +76,28 @@ namespace shop {
     }
 
     void Bundle::Print() {
-        std::string name = (is_client) ? "Client cart:" : "Shop shelf:";
+        string name = (is_client) ? "Client cart:" : "Shop shelf:";
 
-        std::cout << std::endl << name << std::endl;
-        std::cout << std::string(40, '-') << std::endl;
+        cout << endl << name << endl;
+        cout << string(40, '-') << endl;
         if (products.empty()) {
-            std::cout << "< EMPTY >" << std::endl;
+            cout << "< EMPTY >" << endl;
             return;
         }
         for (unsigned int i = 0; i < products.size(); ++i) {
             const Product p = products[i];
-            std::cout
+            cout
                 << p.id << ". "
                 << p.name << " - "
                 << p.count << " x "
                 << CURRENCY << p.price << " = "
-                << CURRENCY << p.price * p.count << std::endl;
+                << CURRENCY << p.price * p.count << endl;
         }
 
         double subtotal = GetSubtotal();
-        std::cout
-            << std::string(20, '.') << std::endl
-            << "Subtotal: " << CURRENCY << subtotal << std::endl;
+        cout
+            << string(20, '.') << endl
+            << "Subtotal: " << CURRENCY << subtotal << endl;
     }
     
     Product Bundle::Pull(unsigned int id, double count) {
@@ -139,10 +145,9 @@ namespace shop {
             throw std::exception("only client cart checkout is allowed!");
         }
         Print();
-        std::cout
-            << ""
-            << "checkout" << std::endl
-            << "total: " << CURRENCY << GetSubtotal() - discount
-            << std::endl;
+        cout
+            << endl
+            << "total (with discount): " << CURRENCY << GetSubtotal() - discount
+            << endl;
     }
 }
