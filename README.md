@@ -6,7 +6,7 @@
 
 This is my second attempt at "just for fun" with c++. This programme was implemented, as part of my homework at cpp course.
 
-This program is an emulation of a discounted checkout in a shop and was implemented as part of a cpp course I'm currently taking.
+This program is an emulation of a discounted checkout in a shop.
 It was written in several approaches for a total of 20+ hours in my spare time.
 
 ## Task
@@ -54,7 +54,7 @@ I played around with this task for a while and made the following
 - classes for shop shelf/client cart, products, promos (dirty, with public accessors, but for now, I'm still learning how to cook them properly)
 - met and used `std::tuple` to return multiple values from a function
 - used my own namespace `shop`
-- played with the `using` directive for individual functions from the standard library
+- ~~played with the `using` directive for individual functions from the standard library~~ (removed: not best practice)
 - promos are calculated according to their functions (function ptr)
 - interaction with shelf/cart (add/remove product)
 - the shelf has a finite number of products
@@ -85,10 +85,6 @@ del <id> <count> - remove product with id <id> and <count> from client's cart
 
 checkout - client's cart checkout (with discount)
 ```
-
-## Questions and topics for further research
-
-- when Promo returned via pointer the name field was empty, after changing the return "by value" the field contained what was expected
 
 ## Notes
 
