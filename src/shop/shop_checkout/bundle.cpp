@@ -3,20 +3,13 @@
 #include <iostream>
 #include <string>
 
-using std::cout; using std::endl;
-using std::string;
-
 namespace shop {
-    const char CURRENCY = '$';
+    const char kCurrency = '$';
 
-    Bundle Bundle::Init() {
-        return Bundle{};
-    }
-    
     Bundle Bundle::InitShelfDefault() {
         
-        Bundle bundle = Init();
-        bundle.is_client = false;
+        auto bundle = Bundle();
+        bundle.is_client_ = false;
         
         auto p1 = Product(1, "bread", "u", 0.9, 100, true, ProductType::FLOUR);
         auto p2 = Product(2, "white bread", "u", 1.1, 100, true, ProductType::FLOUR);
@@ -29,46 +22,50 @@ namespace shop {
         auto p9 = Product(9, "sugar", "kg", 2.05, 100, false);
         auto p10 = Product(10, "pasta", "kg", 1.29, 100, false, ProductType::FLOUR);
 
-        bundle.AddProduct(&p1);
-        bundle.AddProduct(&p2);
-        bundle.AddProduct(&p3);
-        bundle.AddProduct(&p4);
-        bundle.AddProduct(&p5);
-        bundle.AddProduct(&p6);
-        bundle.AddProduct(&p7);
-        bundle.AddProduct(&p8);
-        bundle.AddProduct(&p9);
-        bundle.AddProduct(&p10);
+        bundle.AddProduct(p1);
+        bundle.AddProduct(p2);
+        bundle.AddProduct(p3);
+        bundle.AddProduct(p4);
+        bundle.AddProduct(p5);
+        bundle.AddProduct(p6);
+        bundle.AddProduct(p7);
+        bundle.AddProduct(p8);
+        bundle.AddProduct(p9);
+        bundle.AddProduct(p10);
 
         return bundle;
     };
     
 
-    void Bundle::AddProduct(Product* p) {
-        for (auto iter = products.begin(); iter != products.end(); ++iter)
+    void Bundle::AddProduct(const Product& p) {
+        for (auto it = products_.begin(); it != products_.end(); ++it)
         {
-            if ((*iter).id == (*p).id && (*iter).name == (*p).name) {
-                (*iter).count += (*p).count;
+            if ((*it).id == p.id && (*it).name == p.name) {
+                (*it).count += p.count;
                 return;
             }
         }
-        products.push_back((*p));
+        products_.push_back(p);
     }
 
-    void Bundle::RemoveProduct(Product* p) {
+    void Bundle::RemoveProduct(Product& p) {
         
-        for (auto it = products.begin(); it != products.end(); ++it)
+        for (auto it = products_.begin(); it != products_.end(); ++it)
         {
-            if ((*it).id == (*p).id) {
-                products.erase(it--);
+            if ((*it).id == p.id) {
+                products_.erase(it--);
             }
         }
+    }
+
+    const std::vector<Product>& Bundle::Get() const {
+        return products_;
     }
 
     double Bundle::GetSubtotal() {
         double subtotal = 0;
-        for (unsigned int i = 0; i < products.size(); ++i) {
-            const Product p = products[i];
+        for (unsigned i = 0; i < products_.size(); ++i) {
+            const Product p = products_[i];
             double pos_subtotal = p.count * p.price;
             subtotal += pos_subtotal;
         }
@@ -76,37 +73,37 @@ namespace shop {
     }
 
     void Bundle::Print() {
-        string name = (is_client) ? "Client cart:" : "Shop shelf:";
+        std::string name = (is_client_) ? "Client cart:" : "Shop shelf:";
 
-        cout << endl << name << endl;
-        cout << string(40, '-') << endl;
-        if (products.empty()) {
-            cout << "< EMPTY >" << endl;
+        std::cout << std::endl << name << std::endl;
+        std::cout << std::string(40, '-') << std::endl;
+        if (products_.empty()) {
+            std::cout << "< EMPTY >" << std::endl;
             return;
         }
-        for (unsigned int i = 0; i < products.size(); ++i) {
-            const Product p = products[i];
-            cout
+        for (unsigned i = 0; i < products_.size(); ++i) {
+            const Product p = products_[i];
+            std::cout
                 << p.id << ". "
                 << p.name << " - "
                 << p.count << " x "
-                << CURRENCY << p.price << " = "
-                << CURRENCY << p.price * p.count << endl;
+                << kCurrency << p.price << " = "
+                << kCurrency << p.price * p.count << std::endl;
         }
 
         double subtotal = GetSubtotal();
-        cout
-            << string(20, '.') << endl
-            << "Subtotal: " << CURRENCY << subtotal << endl;
+        std::cout
+            << std::string(20, '.') << std::endl
+            << "Subtotal: " << kCurrency << subtotal << std::endl;
     }
     
-    Product Bundle::Pull(unsigned int id, double count) {
-        Product p = Product();
-        auto iter = products.begin();
-        for (; iter != products.end(); ++iter) {
-            if ((*iter).id == id)
+    Product Bundle::Pull(unsigned id, double count) {
+        auto p = Product();
+        auto it = products_.begin();
+        for (; it != products_.end(); ++it) {
+            if ((*it).id == id)
             {
-                p = *iter;
+                p = *it;
                 break;
             }
         }
@@ -127,27 +124,27 @@ namespace shop {
         }
 
         auto res = Product(p.id, p.name, p.units, p.price, count, p.is_whole, p.type);
-        *iter = p;
+        *it = p;
         if (p.count == 0) {
-            products.erase(iter);
+            products_.erase(it);
         }
 
         return res;
     }
     
-    void Bundle::Move(Bundle* b, unsigned int id, double count) {
+    void Bundle::Move(Bundle& b, unsigned id, double count) {
         auto p = Bundle::Pull(id, count);
-        (*b).AddProduct(&p);
+        b.AddProduct(p);
     }
 
     void Bundle::Checkout(double discount) {
-        if (!is_client) {
+        if (!is_client_) {
             throw std::exception("only client cart checkout is allowed!");
         }
         Print();
-        cout
-            << endl
-            << "total (with discount): " << CURRENCY << GetSubtotal() - discount
-            << endl;
+        std::cout
+            << std::endl
+            << "total (with discount): " << kCurrency << GetSubtotal() - discount
+            << std::endl;
     }
 }

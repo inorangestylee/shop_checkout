@@ -2,8 +2,6 @@
 
 #include <string>
 
-using std::string;
-
 namespace shop {
 
     enum class ProductType {
@@ -13,18 +11,18 @@ namespace shop {
         FRUITS = 0x4
     };
 
-    class Product {
-    public:
-        unsigned int id;
-        string name;
-        string units;
+    struct Product {      
+        Product() = default;
+        Product(unsigned i, std::string n, std::string u, double p, double c, bool w, ProductType pt = ProductType::DEFAULT);
+
+        unsigned id;
+        std::string name;
+        std::string units;
         double price;
         double count;
         bool is_whole;
         bool is_raw = true;
         ProductType type;
-        Product() = default;
-        Product(unsigned int i, string n, string u, double p, double c, bool w, ProductType pt = ProductType::DEFAULT);
     };
 
 }

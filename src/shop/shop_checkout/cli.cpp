@@ -10,45 +10,41 @@
 #include "bundle.h"
 #include "promo.h"
 
-using std::cout; using std::endl;
-using std::vector; using std::string;
-
 namespace cli {
 
-    void cli(shop::Bundle* s, shop::Bundle* c, shop::Promos* p) {
+    void cli(shop::Bundle& s, shop::Bundle& c, shop::Promos& p) {
         motd();
         while (true) {
             prompt(s, c, p);
-            cout << endl;
+            std::cout << std::endl;
         }
     }
 
-    void prompt(shop::Bundle* s, shop::Bundle* c, shop::Promos* p) {
-        string command;
+    void prompt(shop::Bundle& s, shop::Bundle& c, shop::Promos& p) {
+        std::string command;
 
-        cout << "command > ";
-        cout.flush();
+        std::cout << "command > ";
+        std::cout.flush();
 
         getline(std::cin, command);
         std::istringstream iss(command);
 
-        vector<string> cmdvec;
-        string word;
+        std::vector<std::string> cmdvec;
+        std::string word;
 
         while (iss >> word) {
             cmdvec.push_back(word);
         }
 
         if (!cmdvec.empty()) {
-            interp(&cmdvec, s, c, p);
+            interp(cmdvec, s, c, p);
         }
 
         return;
     }
 
-    void interp(const vector<string>* cmdvec, shop::Bundle* s, shop::Bundle* c, shop::Promos* p) {
-        vector<string> cv = *cmdvec;
-        string cmd = cv[0];
+    void interp(const std::vector<std::string>& cmdvec, shop::Bundle& s, shop::Bundle& c, shop::Promos& p) {
+        std::string cmd = cmdvec[0];
 
         if (cmd == "about") {
             about();
@@ -61,26 +57,26 @@ namespace cli {
         }
 
         if (cmd == "print") {
-            if (cv.size() > 1 && cv[1] == "cart") {
+            if (cmdvec.size() > 1 && cmdvec[1] == "cart") {
                 print(c);
                 return;
             }
-            else if (cv.size() > 1 && cv[1] == "shop") {
+            else if (cmdvec.size() > 1 && cmdvec[1] == "shop") {
                 print(s);
                 return;
             }
-            else if (cv.size() > 1 && cv[1] == "promo") {
+            else if (cmdvec.size() > 1 && cmdvec[1] == "promo") {
                 print(p);
                 return;
             }
         }
 
         if (cmd == "add" || cmd == "a") {
-            if (cv.size() > 2) {
+            if (cmdvec.size() > 2) {
                 try {
-                    move(s, c, std::stoul(cv[1]), std::stod(cv[2]));
+                    move(s, c, std::stoul(cmdvec[1]), std::stod(cmdvec[2]));
                 }
-                catch (std::exception& e) {
+                catch (const std::exception& e) {
                     print_error(e);
                 }
                 return;
@@ -88,11 +84,11 @@ namespace cli {
         }
 
         if (cmd == "del" || cmd == "d") {
-            if (cv.size() > 2) {
+            if (cmdvec.size() > 2) {
                 try {
-                    move(c, s, std::stoul(cv[1]), std::stod(cv[2]));
+                    move(c, s, std::stoul(cmdvec[1]), std::stod(cmdvec[2]));
                 }
-                catch (std::exception& e) {
+                catch (const std::exception& e) {
                     print_error(e);
                 }
                 return;

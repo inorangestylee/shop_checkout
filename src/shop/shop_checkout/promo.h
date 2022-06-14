@@ -6,36 +6,32 @@
 
 #include "bundle.h"
 
-using std::string; using std::vector; using std::tuple;
-
 namespace shop {
 
     class Promo {
     public:
-        unsigned int id;
-        string name;
-        double discount;
-        double (*f)(const double percent, const Bundle* b);
-
-        Promo(unsigned int i, string n, double d, double (*fu)(const double percent, const Bundle* b))
+        Promo(unsigned i, std::string n, double d, double (*fu)(const double percent, const Bundle& b))
             : id(i), name(n), discount(d), f(fu) {};
 
-        std::string ToString();
+        std::string ToString() const;
+
+        unsigned id;
+        std::string name;
+        double discount;
+        double (*f)(const double percent, const Bundle& b);
     };
 
     class Promos {
     public:
-        vector<Promo> data;
-
-        static Promos InitDefault();
-        
-        tuple<unsigned int, double> GetBestDiscount(const Bundle* b);
+        static Promos InitDefault();        
+        std::tuple<unsigned, double> GetBestDiscount(const Bundle& b) const;
         void Print();
+        Promo Get(unsigned id) const;
 
-        Promo Get(unsigned int id);
+        std::vector<Promo> data;
     };
 
-    double promo_milk(const double percent, const Bundle* b);
-    double promo_flour(const double percent, const Bundle* b);
-    double promo_mvp(const double percent, const Bundle* b);
+    double promo_milk(const double percent, const Bundle& b);
+    double promo_flour(const double percent, const Bundle& b);
+    double promo_mvp(const double percent, const Bundle& b);
 }

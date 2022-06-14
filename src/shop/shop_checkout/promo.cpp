@@ -7,27 +7,24 @@
 
 #include "bundle.h"
 
-using std::cout; using std::endl;
-using std::string; using std::vector; using std::tuple;
-
 namespace shop {
     
-    string Promo::ToString() {
+    std::string Promo::ToString() const {
         return name;
     }
     
     Promos Promos::InitDefault() {
         Promos res;
         
-        res.data.push_back(Promo(1, "Milk discount - 33%", 33, &promo_milk));
-        res.data.push_back(Promo(2, "Flour discount - 24%", 24, &promo_flour));
-        res.data.push_back(Promo(3, "Most valued position - 50%", 50, &promo_mvp));
+        res.data.emplace_back(1, "Milk discount - 33%", 33, &promo_milk);
+        res.data.emplace_back(2, "Flour discount - 24%", 24, &promo_flour);
+        res.data.emplace_back(3, "Most valued position - 50%", 50, &promo_mvp);
         
         return res;
     }
 
-    tuple<unsigned int, double> Promos::GetBestDiscount(const Bundle* b) {
-        unsigned int best_discount_id = 0;
+    std::tuple<unsigned, double> Promos::GetBestDiscount(const Bundle& b) const {
+        unsigned best_discount_id = 0;
         double best_discount = 0;
         for (Promo x : data) {
             double d = x.f(x.discount, b);
@@ -36,26 +33,26 @@ namespace shop {
                 best_discount_id = x.id;
             }
         }
-        return tuple<unsigned int, double>(best_discount_id, best_discount);
+        return std::tuple<unsigned, double>(best_discount_id, best_discount);
     }
 
     void Promos::Print() {
-        cout << endl << "Promos:" << endl;
+        std::cout << std::endl << "Promos:" << std::endl;
         if (data.empty()) {
-            cout << "< EMPTY >" << endl;
+            std::cout << "< EMPTY >" << std::endl;
             return;
         }
-        for (unsigned int i = 0; i < data.size(); ++i) {
+        for (unsigned i = 0; i < data.size(); ++i) {
             const auto& p = data[i];
-            cout
+            std::cout
                 << p.id << ". "
                 << p.name
-                << endl;
+                << std::endl;
         }
         return;
     }
 
-    Promo Promos::Get(const unsigned int id) {
+    Promo Promos::Get(const unsigned id) const {
         for (Promo p : data) {
             if (p.id == id) {
                 return p;
@@ -64,9 +61,9 @@ namespace shop {
         throw std::exception("promo not found!");
     }
 
-    double promo_milk(const double percent, const Bundle* b) {
+    double promo_milk(const double percent, const Bundle& b) {
         double res = 0;
-        for (const auto& item : (* b).products) {
+        for (const auto& item : b.Get()) {
             if (item.type == ProductType::MILK) {
                 res += (item.count * item.price) * percent / 100;
             }
@@ -74,9 +71,9 @@ namespace shop {
         return res;
     }
 
-    double promo_flour(const double percent, const Bundle* b) {
+    double promo_flour(const double percent, const Bundle& b) {
         double res = 0;
-        for (const auto& item : (*b).products) {
+        for (const auto& item : b.Get()) {
             if (item.type == ProductType::FLOUR) {
                 res += (item.count * item.price) * percent / 100;
             }
@@ -84,10 +81,10 @@ namespace shop {
         return res;
     }
 
-    double promo_mvp(const double percent, const Bundle* b) {
+    double promo_mvp(const double percent, const Bundle& b) {
         double res = 0;
         double mvp = 0;
-        for (const auto& item : (*b).products) {
+        for (const auto& item : b.Get()) {
             double position_subtotal = item.count * item.price;
             if (position_subtotal > mvp) {
                 mvp = position_subtotal;

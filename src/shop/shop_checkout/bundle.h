@@ -4,24 +4,24 @@
 
 #include "product.h"
 
-using std::vector;
-
 namespace shop {
 
     class Bundle {
-    private:
-        bool is_client = true;
     public:
-        vector<Product> products;
-        static Bundle Init();
         static Bundle InitShelfDefault();
-        void AddProduct(Product* p);
-        void RemoveProduct(Product* p);
+
+        void AddProduct(const Product& p);
+        void RemoveProduct(Product& p);
         double GetSubtotal();
         void Print();
+        const std::vector<Product>& Get() const;
         void Checkout(double discount);
-        Product Pull(unsigned int id, double count);
-        void Move(Bundle* b, unsigned int id, double count);
+        Product Pull(unsigned id, double count);
+        void Move(Bundle& b, unsigned id, double count);
+
+    private:
+        bool is_client_ = true;
+        std::vector<Product> products_;
     };
 
 }
