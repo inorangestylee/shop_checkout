@@ -11,9 +11,9 @@ namespace shop {
         auto bundle = Bundle();
         bundle.is_client_ = false;
         
-        auto p1 = Product(1, "bread", "u", 0.9, 100, true, ProductType::FLOUR);
-        auto p2 = Product(2, "white bread", "u", 1.1, 100, true, ProductType::FLOUR);
-        auto p3 = Product(3, "milk", "l", 1.3, 100, false, ProductType::MILK);
+        auto p1 = Product(1, "bread", "loaf", 0.9, 100, true, ProductType::FLOUR);
+        auto p2 = Product(2, "white bread", "loaf", 1.1, 100, true, ProductType::FLOUR);
+        auto p3 = Product(3, "milk", "pack", 1.3, 100, true, ProductType::MILK);
         auto p4 = Product(4, "butter", "kg", 3.6, 100, false, ProductType::MILK);
         auto p5 = Product(5, "sour cream", "pack", 1.8, 100, true, ProductType::MILK);
         auto p6 = Product(6, "meat", "kg", 16, 100, false);
@@ -86,7 +86,7 @@ namespace shop {
             std::cout
                 << p.id << ". "
                 << p.name << " - "
-                << p.count << " x "
+                << p.count << " " << p.units << " x "
                 << kCurrency << p.price << " = "
                 << kCurrency << p.price * p.count << std::endl;
         }
