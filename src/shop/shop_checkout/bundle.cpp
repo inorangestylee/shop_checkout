@@ -4,6 +4,7 @@
 #include <string>
 
 namespace shop {
+    
     const char kCurrency = '$';
 
     Bundle Bundle::InitShelfDefault() {
@@ -73,7 +74,7 @@ namespace shop {
     }
 
     void Bundle::Print() {
-        std::string name = (is_client_) ? "Client cart:" : "Shop shelf:";
+        std::string name = is_client_ ? "Client cart:" : "Shop shelf:";
 
         std::cout << std::endl << name << std::endl;
         std::cout << std::string(40, '-') << std::endl;
